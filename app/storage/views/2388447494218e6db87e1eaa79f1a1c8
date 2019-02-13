@@ -1,0 +1,48 @@
+<?php $__env->startSection('content'); ?>
+
+<div class="modal show" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="alert">
+                <form id="sign_in" action="<?php echo asset('login'); ?>" method="POST">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <img src="<?php echo asset('print/image/ro7.png'); ?>" height="150" width="150" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <h3>DOH RO7 PPMP</h3>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-3">
+                            <fieldset>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Username" name="username" type="text" autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                                </div>
+                                <button class="btn btn-lg btn-success btn-block" type="submit">SIGN IN</button>
+                            </fieldset>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-12 col-md-offset-3">
+                                <p>
+                                <a href="<?php echo asset('assets'); ?>">Master</a>
+                                </p>
+                                <p>
+                                <a href="<?php echo asset('reset/password'); ?>">Forgot Password?</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>    
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('section.layout.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

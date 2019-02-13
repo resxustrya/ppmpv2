@@ -1,0 +1,64 @@
+<?php $__env->startSection('content'); ?>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th width="15%">Item Description / General Description</th>
+            <th width="5px">Unit</th>
+            <th width="7px">Unit Cost</th>
+            
+            <?php foreach(DB::table('section')->where('division','=', Auth::user()->division)->get(['short']) as $section): ?>
+                <th width="7px"><?php echo $section->short; ?></th>
+            <?php endforeach; ?>
+            
+            <th width="7px">Total Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        <?php foreach(DB::table('table_d')->where('division','=',Auth::user()->division)->groupBy('code')->orderBy('item','ASC')->get() as $item): ?>
+        <?php $total = 0; $section_total = 0; ?>
+        <tr>
+            <td><?php echo $item->item; ?></td>
+            <td><?php echo $item->unit; ?></td>
+            <td>
+                <?php if($item->q1_amt > 0): ?>
+                    (<?php echo number_format($item->q1_amt,2); ?>) <br />
+                <?php endif; ?>
+                <?php if($item->q2_amt > 0): ?>
+                    (<?php echo number_format($item->q2_amt,2); ?>) <br />
+                <?php endif; ?>
+                <?php if($item->q3_amt > 0): ?>
+                    (<?php echo number_format($item->q3_amt,2); ?>) <br />
+                <?php endif; ?>
+                <?php if($item->q4_amt > 0): ?>
+                    (<?php echo number_format($item->q4_amt,2); ?>) <br />
+                <?php endif; ?>
+            </td>
+            <?php foreach(DB::table('section')->where('division','=', Auth::user()->division)->get() as $section): ?>
+                <?php
+                    $section_total = 0;
+                    $quantity = DB::table('table_d')
+                                    ->where('item','=',$item->item)
+                                    ->where('created_by','=',$section->id)
+                                    ->first();
+                    
+                ?>
+                <?php if(isset($quantity)): ?>
+                    <?php
+                        $section_total = $quantity->q1_qty + $quantity->q2_qty + $quantity->q3_qty + $quantity->q4_qty;
+                        $total += $section_total;
+
+                    ?>
+                <?php endif; ?>
+                <?php $section_total = $section_total > 0 ? number_format($section_total) : ''; ?>
+                <td><?php echo $section_total; ?></td>
+            <?php endforeach; ?>
+            <?php $total = $total > 0 ? number_format($total) : ''; ?>
+            <td><?php echo $total; ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('division.layout.main', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

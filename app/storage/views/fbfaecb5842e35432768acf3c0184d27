@@ -1,0 +1,11 @@
+
+<h5>Print By Program</h5>
+<form action="<?php echo asset('create-program'); ?>" method="POST" id="form_program">
+    <div class="form-group" data-getprogram="<?php echo asset('d/get/program'); ?>" data-getvenue="<?php echo asset('d/get/venue'); ?>">
+        <select name="expense" class="form-control" onchange="expense_change(this);">
+            <?php foreach(DB::table('ppmp_code')->where('id','<>',1)->where('id','<>',2)->get() as $code): ?>
+                <option value="<?php echo $code->id; ?>"><?php echo $code->expense_name; ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</form>

@@ -1,0 +1,33 @@
+<?php $__env->startSection('content'); ?>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h4><?php echo $head; ?></h4>
+                <form action="<?php echo asset('print/print_table_g.php'); ?>" method="POST">
+                    <input type="hidden" name="section" value="<?php echo Auth::user()->section; ?>" />
+                    <input type="hidden" name="division" value="<?php echo Auth::user()->division; ?>" />
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Select</th>
+                            <th>Item Name</th>
+                        </tr>
+                        <?php foreach($table_g as $g): ?>
+                            <tr>
+                                <td><input type="checkbox" name="items[]" value="<?php echo $g->item; ?>" /></td>
+                                <td><?php echo $g->item; ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+                    <button type="submit" class="btn btn-success">
+                        <span class="glyphicon glyphicon-print"></span> Print
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('js'); ?>
+    
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('section.layout.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

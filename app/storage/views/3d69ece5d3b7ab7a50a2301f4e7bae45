@@ -1,0 +1,17 @@
+<?php $__env->startSection('content'); ?>
+    <table class="table table-bordered">
+        <tr>
+            <th>Code</th>
+            <th>Item</th>
+            <th>*</th>
+        </tr>
+        <?php foreach($items as $item): ?>
+            <tr>
+                <td><?php echo $item->code; ?></td>
+                <td><?php echo $item->item; ?></td>
+                <td><a href="<?php echo asset('division/delete/'. $item->code); ?>" class="btn btn-danger btn-xs">Delete</a></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('division.layout.main', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

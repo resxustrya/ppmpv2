@@ -1,0 +1,119 @@
+
+
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0;background-color:white;" id="ppmp_nav">
+    <div class="navbar-header" style="background-color:white;">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="<?php echo asset('section/table_a'); ?>" style="background-color:#2ECC71;color:white;">DOH 7 | PPMP</a>
+    </div>
+    <!-- /.navbar-header -->
+    <ul class="nav navbar-top-links navbar-left" style="background-color:white;">
+        <li class="dropdown">
+            <a href="javascript:void(0);" id="save" title="File" class="btn" >
+                <i class="glyphicon glyphicon-floppy-disk"></i> <b>Save</b>
+            </a>
+            <!-- /.dropdown-messages -->
+        </li>
+        <!-- /.dropdown -->
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle"  data-toggle="dropdown" data-submenu="" aria-expanded="false">
+                <span class="glyphicon glyphicon-tasks"></span> Expenses <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li class="dropdown-submenu">
+                    <a tabindex="0">OFFICE SUPPLIES</a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-header">CONSUMABLE </li>
+                        <li class="divider"></li>
+                        <li><a tabindex="0" href="<?php echo asset('division/table_a'); ?>">(a.) Per Employee</a></li>
+                        <li><a tabindex="0" href="<?php echo asset('division/table_b'); ?>">(b.) Per Section</a></li>
+                        <li><a tabindex="0" href="<?php echo asset('division/table_c'); ?>">(c.) Training Supplies</a></li>
+                        <li><a tabindex="0" href="<?php echo asset('division/table_d'); ?>">(d.) Equipment Consumable</a></li>
+                        <li class="divider"></li>
+                        <li class="dropdown-header"> NON-CONSUMABLE </li>
+                        <li class="divider"></li>
+                        <li><a tabindex="0" href="<?php echo asset('division/table_e'); ?>">(a.) Per Section</a></li>
+                        <li class="divider"></li>
+                        <li><a tabindex="0" href="<?php echo asset('division/table_z'); ?>">OTHER COMMON-USE OFFICE SUPPLIES SPECIFICALLY USED ONLY BY CONCERENED SECTION</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown-submenu">
+                    <a tabindex="0">SEMI-EXPANDABLE EQUIPEMENT AND FURNITURE</a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-header"> COMMON-USE/REGULAR/STANDARD OFFICE/IT/TRAINING EQUIPMENT/FURNITURE </li>
+                        <li><a tabindex="0" href="<?php echo asset('division/table_f'); ?>">(a.) Per Employee</a></li>
+                        <li><a tabindex="0" href="<?php echo asset('division/table_g'); ?>">(b.) Per Section / Division</a></li>
+                    </ul>
+                </li>
+                <li class="divider"></li>
+                <li class="dropdown-header">OPEN LIST</li>
+                <?php foreach(DB::table('ppmp_code')->where('id','<>',1)->where('id','<>',2)->get() as $code): ?>
+                    <li class="dropdown-submenu">
+                        <a tabindex="0"><?php echo $code->expense_name; ?></a>
+                        <ul class="dropdown-menu">
+                            <li><a tabindex="0" href="<?php echo asset('division/open-list/expense-amount/'.$code->id); ?>">Expense Amount</a></li>
+                            <li><a tabindex="0" href="<?php echo asset('division/open-list/'.$code->id); ?>">Items</a></li>
+                            <li><a tabindex="0" href="<?php echo asset('division/delete/open-list/'. $code->id); ?>">Delete Item</a></li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="0">Programs</a>
+                                <ul class="dropdown-menu">
+                                    <li class="dropdown-header">List of Programs</li>
+                                    <?php foreach(DB::table('section')->where('division','=',Auth::user()->division)->get() as $section): ?>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header"><?php echo $section->short; ?></li>
+                                        <?php foreach(DB::table('program_name')->where('ppcode','=',$code->id)->where('division','=',Auth::user()->division)->where('section','=',$section->id)->get() as $program): ?>
+                                            <li class="dropdown-submenu">
+                                                <a href="#"><?php echo $program->name; ?></a>
+                                                <ul class="dropdown-menu">
+                                                    <li class="dropdown-header">Program Venues</li>
+                                                    <?php
+                                                        $venues = DB::table('program_training_venue')
+                                                            ->leftJoin('training_venue','program_training_venue.venue_id','=', 'training_venue.id')
+                                                            ->where('program_training_venue.program_id','=',$program->id)
+                                                            ->orderBy('training_venue.order','ASC')
+                                                            ->get();
+                                                    ?>
+                                                    <?php foreach($venues as $venue): ?>
+                                                        <li><a href="<?php echo asset('division/program/venue/'.$program->id.'/'.$venue->id.'/'.$section->id); ?>"><?php echo $venue->venue; ?></a> </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            </li>
+                                        <?php endforeach; ?>
+                                    <?php endforeach; ?>    
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </li>
+        <!-- /.dropdown -->
+
+        <li class="dropdown">
+            <a target="_blank" href="<?php echo asset('print/consolidate.php?division='.Auth::user()->division); ?>">
+                <i class="glyphicon glyphicon-print"></i> Print
+            </a>
+        </li>
+
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <span class="glyphicon glyphicon-user"> </span>
+                    <?php echo strtoupper(DB::table('section')->where('id','=',Auth::user()->section)->first()->short); ?>
+
+                <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-user">
+                <li>
+                    <a href="<?php echo asset('logout'); ?>"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                </li>
+            </ul>
+        </li>
+        <li><strong style="font-size:12px;font-weight: bold;"><?php echo Session::get('page'); ?></strong></li>
+        <!-- /.dropdown -->
+        <!-- /.dropdown -->
+    </ul>
+</nav>

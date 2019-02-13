@@ -1,0 +1,66 @@
+<?php $__env->startSection('content'); ?>
+<table class="table">
+    <tr>
+        <td><strong><?php echo $data['section']; ?></strong></td>
+    </tr>
+    <tr>
+        <td><?php echo $data['program']; ?></td>
+        
+    </tr>
+    <tr>
+        <td><?php echo $data['venue']; ?></td>
+    </tr>    
+</table>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Item Name</th>
+            <th>Unit</th>
+            <th>Q1 Qty</th>
+            <th>Q1 Amt</th>
+            <th>Q2 Qty</th>
+            <th>Q2 Amt</th>
+            <th>Q3 Qty</th>
+            <th>Q3 Amt</th>
+            <th>Q4 Qty</th>
+            <th>Q4 Amt</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach($data['program_items'] as $item): ?>
+            <?php if($item->item): ?>
+                <?php $total = 0; ?>
+                <tr>
+                    <td><?php echo $item->item; ?></td>
+                    <td><?php echo $item->unit; ?></td>
+                    <td><?php echo $item->q1_qty; ?></td>
+                    <td>
+                        <?php if($item->q1_amt > 0): ?>
+                            (<?php echo number_format($item->q1_amt,2); ?>) <br />
+                        <?php endif; ?>
+                    </td>
+                    <td><?php echo $item->q2_qty; ?></td>
+                    <td>
+                        <?php if($item->q2_amt > 0): ?>
+                            (<?php echo number_format($item->q2_amt,2); ?>) <br />
+                        <?php endif; ?>
+                    </td> 
+                    <td><?php echo $item->q3_qty; ?></td>
+                    <td>
+                        <?php if($item->q3_amt > 0): ?>
+                            (<?php echo number_format($item->q3_amt,2); ?>) <br />
+                        <?php endif; ?>
+                    </td>    
+                    <td><?php echo $item->q4_qty; ?></td>
+                    <td>
+                        <?php if($item->q4_amt > 0): ?>
+                            (<?php echo number_format($item->q4_amt,2); ?>) <br />
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endif; ?>    
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('division.layout.main', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
